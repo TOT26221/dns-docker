@@ -10,11 +10,15 @@ Bevor Sie beginnen, stellen Sie sicher, dass Sie Docker auf Ihrem System install
 ## Schnellstart
 
 1. **Klonen Sie dieses Repository** oder laden Sie die Dateien in ein lokales Verzeichnis herunter.
-2. **Navigieren Sie in das Projektverzeichnis** und starten Sie die Docker-Container mit:
+2. **Aufbauen des Netzwerkes**
+    ```bash
+      docker network create --gateway 192.168.0.1 --subnet 192.168.0.0/24 vdnsnet
+      ```
+3. **Navigieren Sie in das Projektverzeichnis** und starten Sie die Docker-Container mit:
    ```bash
    docker-compose up -d
    ```
-3. **Testen Sie die DNS-Auflösung und das Pingen** vom Client zum DNS-Server:
+4. **Testen Sie die DNS-Auflösung und das Pingen** vom Client zum DNS-Server:
    - DNS-Auflösung testen:
      ```bash
      docker exec dns-client dig @192.168.0.10 dns1.mis.lan
