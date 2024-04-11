@@ -1,0 +1,3 @@
+FROM ubuntu/bind9
+COPY named.conf.default-zones /etc/bind/named.conf.default-zones
+COPY db.mis /etc/bind/db.mis

@@ -1,0 +1,4 @@
+zone "mis.lan" {
+    type master;
+    file "/etc/bind/db.mis";
+};

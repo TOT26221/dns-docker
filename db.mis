@@ -1,0 +1,17 @@
+; Zone: MIS.LAN.
+; Exported (yyyy-mm-ddThh:mm:ss.sssZ): 2023-04-24T14:39:09.787Z
+$ORIGIN MIS.LAN.
+$TTL 3600
+; SOA Record
+@ IN SOA mis.lan. hostmaster.mis.lan. (
+1682347150 ;serial
+3600 ;refresh
+600 ;retry
+604800 ;expire
+86400 ;minimum ttl
+)
+; NS Records
+@ IN NS dns1.mis.lan.
+; A Records
+dns1 IN A 192.168.0.10
+client-1 IN A 192.168.0.20

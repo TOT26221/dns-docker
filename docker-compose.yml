@@ -1,0 +1,31 @@
+version: '3'
+services:
+  dns:
+    container_name: dns
+    build:
+      context: .
+      dockerfile: DNSDockerfile
+    ports:
+      - 53:53/udp
+      - 53:53/tcp
+    volumes:
+      - ./named.conf.default-zones:/etc/bind/named.conf.default-zones
+      - ./db.mis:/etc/bind/db.mis
+    networks:
+      vdnsnet:
+        ipv4_address: 192.168.0.10
+  client1:
+    container_name: client
+    build:
+      context: .
+      dockerfile: ClientDockerfile
+    dns:
+      - 192.168.0.10
+    stdin_open: true
+    tty: true
+    networks:
+      vdnsnet:
+        ipv4_address: 192.168.0.20
+networks:
+  vdnsnet:
+    external: true
