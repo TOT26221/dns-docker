@@ -21,11 +21,11 @@ Bevor Sie beginnen, stellen Sie sicher, dass Sie Docker auf Ihrem System install
 4. **Testen Sie die DNS-Auflösung und das Pingen** vom Client zum DNS-Server:
    - DNS-Auflösung testen:
      ```bash
-     docker exec dns-client dig @192.168.0.10 dns1.mis.lan
+     docker exec client dig @192.168.0.10 dns1.mis.lan
      ```
    - Ping den DNS-Server:
      ```bash
-     docker exec dns-client ping -c 4 dns1.mis.lan
+     docker exec client ping -c 4 dns1.mis.lan
      ```
 
 ## Dateistruktur
