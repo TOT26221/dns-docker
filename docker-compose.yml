@@ -1,6 +1,7 @@
-version: '4'
+version: '3'
+
 services:
-  dns:
+  dns-server:
     build:
       context: .
       dockerfile: DNSDockerfile
@@ -9,7 +10,9 @@ services:
       vdnsnet:
         ipv4_address: 192.168.0.10
 
-  client:
+  dns-client:
+    tty: true
+    stdin_open: true
     build:
       context: .
       dockerfile: ClientDockerfile
@@ -18,20 +21,30 @@ services:
       vdnsnet:
         ipv4_address: 192.168.0.20
     depends_on:
-      - dns
+      - dns-server
 
-  email:
-    image: namshi/smtp
+  email-server:
+    image: mailserver/docker-mailserver:latest
     container_name: email-server
+    hostname: mail
+    domainname: mis.lan
     environment:
-      - MAILNAME=mail.mis.lan
-      - SMARTHOST_ADDRESS=smtp.example.com
-      - SMARTHOST_PORT=587
-      - SMARTHOST_USER=user@example.com
-      - SMARTHOST_PASSWORD=password
+      - MAIL_SERVER_DOMAIN=mail.mis.lan
+    volumes:
+      - maildata:/var/mail
+      - mailstate:/var/mail-state
+      - maillogs:/var/log/mail
+      - ./config/:/tmp/docker-mailserver/
+    ports:
+      - "25:25"
+      - "143:143"
+      - "587:587"
+      - "993:993"
     networks:
       vdnsnet:
         ipv4_address: 192.168.0.25
+    depends_on:
+      - dns-server
 
 networks:
   vdnsnet:
@@ -39,3 +52,8 @@ networks:
     ipam:
       config:
         - subnet: 192.168.0.0/24
+
+volumes:
+  maildata:
+  mailstate:
+  maillogs:

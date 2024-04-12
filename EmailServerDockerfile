@@ -1,24 +1,15 @@
-FROM postix:latest
+# Verwende das offizielle Ubuntu-Image als Basis
+FROM ubuntu:20.04
 
-# Installiere Postfix.
-RUN apt-get update && apt-get install -y postfix
+# Installiere net-tools für netstat, postfix als Mail-Server und rsyslog für das Logging
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y net-tools postfix rsyslog
 
-# Konfiguriere Postfix. Hier sollten deine Konfigurationsbefehle stehen.
-# Zum Beispiel:
-RUN postconf -e 'relayhost = [smtp.example.com]:587' \
-    && postconf -e 'smtp_sasl_auth_enable = yes' \
-    && postconf -e 'smtp_sasl_security_options = noanonymous' \
-    && postconf -e 'smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd' \
-    && postconf -e 'smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt' \
-    && postconf -e 'smtp_use_tls = yes'
+# Setze Umgebungsvariablen für Postfix
+ENV MAILNAME=meinemailserver.com
 
-# Kopiere eventuelle zusätzliche Konfigurationsdateien in den Container.
+# Kopiere zusätzliche Konfigurationsdateien, wenn vorhanden
 # COPY main.cf /etc/postfix/main.cf
-# COPY sasl_passwd /etc/postfix/sasl_passwd
 
-# Stelle sicher, dass alle notwendigen Dateien die richtigen Berechtigungen haben.
-# RUN chmod 600 /etc/postfix/sasl_passwd
-# RUN postmap /etc/postfix/sasl_passwd
-
-# Führe den Postfix-Dienst aus.
-CMD ["postfix", "start-fg"]
+# Starte postfix und rsyslog im Vordergrund
+CMD service rsyslog start && service postfix start && tail -F /var/log/mail.log
