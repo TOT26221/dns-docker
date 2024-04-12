@@ -21,14 +21,20 @@ Bei benutzung wird gefordert das man in einem eigenem Branch arbeitet.
    docker-compose up -d
    ```
 4. **Testen Sie die DNS-Auflösung und das Pingen** vom Client zum DNS-Server:
+   - Auf den Client daraufsteigen(in die shell von Client)
+      ```bash
+     docker exec -it client bash
+
+     ```
    - DNS-Auflösung testen:
      ```bash
-     docker exec client dig @192.168.0.10 dns1.mis.lan
+     dig @192.168.0.10 dns1.mis.lan
      ```
    - Ping den DNS-Server:
      ```bash
-     docker exec client ping -c 4 dns1.mis.lan
+     ping -c 4 dns1.mis.lan
      ```
+
 
 ## Dateistruktur
 
