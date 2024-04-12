@@ -6,7 +6,9 @@ Dieses Repository enthält die notwendigen Dateien und eine Anleitung, um ein ei
 ## Voraussetzungen
 
 Bevor Sie beginnen, stellen Sie sicher, dass Sie Docker auf Ihrem System installiert haben. Die Anleitung ist für Linux, Mac und Windows geeignet, sofern Docker verfügbar ist.
+## Bedingungen bei der Arbeit mit diesem repository
 
+Bei benutzung wird gefordert das man in einem eigenem Branch arbeitet.
 ## Schnellstart
 
 1. **Klonen Sie dieses Repository** oder laden Sie die Dateien in ein lokales Verzeichnis herunter.
