@@ -24,13 +24,12 @@ Bei benutzung wird gefordert das man in einem eigenem Branch arbeitet.
    - Auf den Client daraufsteigen(in die shell von Client)
       ```bash
      docker exec -it client bash
-
      ```
    - DNS-Auflösung testen:
      ```bash
      dig @192.168.0.10 dns1.mis.lan
      ```
-   - Ping den DNS-Server:
+   - Ping den DNS-Server(das c steht für die wiederholungen:
      ```bash
      ping -c 4 dns1.mis.lan
      ```
