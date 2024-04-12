@@ -44,11 +44,14 @@ Für eine detaillierte Anleitung, wie Sie das DNS-System von Grund auf selbst ei
 ## Beiträge
 
 Fühlen Sie sich frei, Forks zu erstellen, Issues zu eröffnen und Pull-Requests zu senden. Jede Verbesserung oder Vorschlag ist willkommen.
-
+ 
 ## Bei Fehlern
+1. **Standard Fehlerbehebung**
+   -Das GIT-repository wird aktualisiert
   ```bash
       git pull
   ```
+   -Docker wird reBuilded
   ```bash
       docker compose build
   ```
