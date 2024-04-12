@@ -47,7 +47,7 @@ Fühlen Sie sich frei, Forks zu erstellen, Issues zu eröffnen und Pull-Requests
  
 ## Bei Fehlern
 1. **Standard Fehlerbehebung**
-   - Das GIT-repository wird aktualisiert:
+- Das GIT-repository wird aktualisiert:
   ```bash
       git pull
   ```
