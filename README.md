@@ -43,6 +43,13 @@ Für eine detaillierte Anleitung, wie Sie das DNS-System von Grund auf selbst ei
 
 Fühlen Sie sich frei, Forks zu erstellen, Issues zu eröffnen und Pull-Requests zu senden. Jede Verbesserung oder Vorschlag ist willkommen.
 
+## Bei Fehlern
+  ```bash
+      git pull
+  ```
+    ```bash
+      docker compose build
+  ```
 ## Lizenz
 
 Dieses Projekt ist unter der MIT Lizenz lizenziert. Siehe [LICENSE](LICENSE) für Details.
