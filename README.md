@@ -48,7 +48,8 @@ Fühlen Sie sich frei, Forks zu erstellen, Issues zu eröffnen und Pull-Requests
 ## Bei Fehlern
   ```bash
       git pull
-  
+  ```
+  ```bash
       docker compose build
   ```
 ## Lizenz
