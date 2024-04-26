@@ -1,31 +1,51 @@
 version: '3'
+
 services:
   dns:
-    container_name: dns
-    build:
-      context: .
-      dockerfile: DNSDockerfile
-    ports:
-      - 53:53/udp
-      - 53:53/tcp
+    image: bind9
+    container_name: dns-server
     volumes:
-      - ./named.conf.default-zones:/etc/bind/named.conf.default-zones
       - ./db.mis:/etc/bind/db.mis
+      - ./named.conf.default-zones:/etc/bind/named.conf.default-zones
     networks:
       vdnsnet:
         ipv4_address: 192.168.0.10
-  client1:
-    container_name: client
-    build:
-      context: .
-      dockerfile: ClientDockerfile
-    dns:
-      - 192.168.0.10
-    stdin_open: true
-    tty: true
+
+  client:
+    image: ubuntu:20.04
+    container_name: dns-client
+    command: tail -f /dev/null
     networks:
       vdnsnet:
         ipv4_address: 192.168.0.20
+
+  mail:
+    image: mailserver/docker-mailserver:latest
+    container_name: mail-server
+    environment:
+      - MAIL_USER=user1@mis.lan
+      - MAIL_PASS=password123
+    volumes:
+      - maildata:/var/mail
+      - mailstate:/var/mail-state
+      - maillogs:/var/log/mail
+    ports:
+      - "25:25"
+      - "143:143"
+      - "587:587"
+      - "993:993"
+    networks:
+      vdnsnet:
+        ipv4_address: 192.168.0.30
+
 networks:
   vdnsnet:
-    external: true
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
+
+volumes:
+  maildata:
+  mailstate:
+  maillogs:
