@@ -1,50 +1,52 @@
 version: '3.8'
 
-
 services:
-  dns:
-    image: bind9
-    container_name: dns-server
+  dns-server:
+    image: bind9-official-image:latest  # Ersetze bind9-official-image mit dem korrekten Image-Namen
+    container_name: bind9
     volumes:
-      - ./db.mis:/etc/bind/db.mis
-      - ./named.conf.default-zones:/etc/bind/named.conf.default-zones
+      - ./bind9_conf:/etc/bind
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
     networks:
-      vdnsnet:
-        ipv4_address: 192.168.0.10
+      - dnsnet
 
-  client:
-    image: ubuntu:20.04
-    container_name: dns-client
-    command: tail -f /dev/null
-    networks:
-      vdnsnet:
-        ipv4_address: 192.168.0.20
-
-  mail:
+  mail-server:
     image: mailserver/docker-mailserver:latest
-    container_name: mail-server
-    environment:
-      - MAIL_USER=user1@mis.lan
-      - MAIL_PASS=password123
+    container_name: mailserver
+    env_file:
+      - mailserver.env
     volumes:
-      - maildata:/var/mail
-      - mailstate:/var/mail-state
-      - maillogs:/var/log/mail
+      - ./maildata:/var/mail
+      - ./mailstate:/var/mail-state
+      - ./maillogs:/var/log/mail
+      - ./config/:/tmp/docker-mailserver/
     ports:
       - "25:25"
       - "143:143"
       - "587:587"
       - "993:993"
     networks:
-      vdnsnet:
-        ipv4_address: 192.168.0.30
+      - dnsnet
+    depends_on:
+      - dns-server
+
+  dns-client:
+    image: ubuntu:20.04
+    container_name: dns-client
+    command: tail -f /dev/null
+    networks:
+      - dnsnet
+    depends_on:
+      - dns-server
 
 networks:
-  vdnsnet:
+  dnsnet:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.0.0/24
+        - subnet: 192.168.50.0/24
 
 volumes:
   maildata:
