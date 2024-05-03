@@ -1,62 +1,44 @@
-version: '3'  # Version des Docker Compose-Dateiformats
+version: '3.8'
 
-services:  # Definition der Dienste
-  dns-server:  # Name des Dienstes
-    build:  # Build-Konfiguration
-      context: .  # Build-Kontext ist das aktuelle Verzeichnis
-      dockerfile: DNSDockerfile  # Dockerfile zur Erstellung des Images
-    container_name: dns-server  # Name des Containers, wenn er ausgeführt wird
-    networks:  # Netzwerke, zu denen der Dienst gehört
-      
-      vdnsnet:  # Name des Netzwerks
-        ipv4_address: 192.168.0.10  # IP-Adresse innerhalb des Netzwerks
+services:
+  dns:
+    container_name: dns
+    build:
+      context: .
+      dockerfile: DNSDockerfile
+    ports:
+      - "53:53/udp"  # Öffnet UDP für den DNS-Server auf dem Host
+      - "53:53/tcp"  # Öffnet TCP für den DNS-Server auf dem Host
+    volumes:
+      - "./named.conf.default-zones:/etc/bind/named.conf.default-zones"
+      - "./db.mis:/etc/bind/db.mis"
+    networks:
+      publicnet:
+        ipv4_address: 192.168.50.10  # Öffentliche IP im gebridgeden Netzwerk
+      privatenet:
+        ipv4_address: 192.168.100.10  # Private IP im internen Netzwerk
 
-  dns-client:  # Ein weiterer Dienst
-    tty: true  # Pseudo-TTY zuweisen
-    stdin_open: true  # STDIN offen halten, auch wenn nicht angehängt
+  client1:
+    container_name: client
     build:
       context: .
       dockerfile: ClientDockerfile
-    container_name: client
+    dns:
+      - 192.168.100.10  # Nutzt den DNS-Server über das interne Netzwerk
     networks:
-      
-      vdnsnet:
-        ipv4_address: 192.168.0.20
-    depends_on:  # Abhängigkeit zwischen Diensten ausdrücken
-      - dns-server  # dns-client hängt von dns-server ab
-
-  email-server:  # Ein weiterer Dienst
-    image: mailserver/docker-mailserver:latest  # Verwenden Sie ein vorgefertigtes Image von Docker Hub
-    container_name: email-server
-    hostname: mail  # Hostname des Containers
-    domainname: mis.lan  # Domainname des Containers
-    environment:  # Umgebungsvariablen
-      - MAIL_SERVER_DOMAIN=mail.mis.lan  # Setzen der Umgebungsvariable MAIL_SERVER_DOMAIN
-    volumes:  # Pfade als Volumes einbinden
-      - maildata:/var/mail  # Benanntes Volume
-      - mailstate:/var/mail-state  # Benanntes Volume
-      - maillogs:/var/log/mail  # Benanntes Volume
-      - ./config/:/tmp/docker-mailserver/  # Bind-Mount
-    ports:  # Ports freigeben
-      - "25:25"  # SMTP
-      - "143:143"  # IMAP
-      - "587:587"  # Submission
-      - "993:993"  # IMAPS
-    networks:
-      
-      vdnsnet:
-        ipv4_address: 192.168.0.25
-    depends_on:
-      - dns-server
+      privatenet:  # Nur im internen Netzwerk, nicht gebridged
+    stdin_open: true
+    tty: true
 
 networks:
-  vdnsnet:  # Definition eines Netzwerks
-    # Verwenden des Bridge-Treibers
-    ipam:  # IP-Adressverwaltung
-      config:  # Konfiguration für IPAM
-        - subnet: 192.168.0.0/24  # Subnetz für das Netzwerk
+  publicnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.50.0/24  # Subnetz für das öffentliche Netzwerk
 
-volumes:  # Definition der Volumes
-  maildata:  # Benanntes Volume
-  mailstate:  # Benanntes Volume
-  maillogs:  # Benanntes Volume
+  privatenet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24  # Subnetz für das private Netzwerk

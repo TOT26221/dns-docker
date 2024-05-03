@@ -1,19 +1,23 @@
-$TTL 86400      ; Standard Time To Live ist 24 Stunden
-$ORIGIN mis.lan.
-@     IN    SOA  dns.mis.lan. admin.mis.lan. (
-              20240101   ; Seriennummer, in der Regel das Datum gefolgt von einem Zähler
-              28800      ; Refresh
-              7200       ; Retry
-              604800     ; Expire
-              86400 )    ; Minimum TTL
+$TTL    86400      ; Default TTL
+@       IN SOA     ns1.mis.lan. admin.mis.lan. (
+                  2024050501 ; Serial
+                  7200       ; Refresh
+                  1800       ; Retry
+                  1209600    ; Expire
+                  86400      ; Minimum TTL
+)
 
-      IN    NS   dns.mis.lan.
-      IN    MX   10 mail.mis.lan.
+; Define the nameservers and the mail servers
+@       IN NS      ns1.mis.lan.
+@       IN MX 10   mail.mis.lan.
 
-; Definition der Hostnamen
-dns   IN    A    192.168.0.10
-mail  IN    A    192.168.0.25
+; Define A records for the nameservers and other subdomains
+ns1     IN A       192.168.100.10
+mail    IN A       192.168.100.25
+www     IN A       192.168.100.30
 
-; CNAME Einträge
-www   IN    CNAME mis.lan.
-ftp   IN    CNAME mis.lan.
+; Define CNAME records
+ftp     IN CNAME   www.mis.lan.
+
+; Define additional records such as SPF and TXT
+@       IN TXT     "v=spf1 mx -all"  ; SPF record

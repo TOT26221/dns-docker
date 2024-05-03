@@ -1,3 +1,18 @@
-FROM ubuntu/bind9
+# Verwende das offizielle Ubuntu-Image als Basis
+FROM ubuntu:20.04
+
+# Installiere BIND9 DNS-Server
+RUN apt-get update && \
+    apt-get install -y bind9 bind9-utils bind9-doc\
+    apt-get install -y bash-completion command-not-found mtr-tiny dnsutils net-tools && \
+    apt-get install -y nmap traceroute netcat iproute2 tcpdump iputils-ping isc-dhcp-client && \
+# Kopiere die BIND-Konfigurationsdateien in den Container
 COPY named.conf.default-zones /etc/bind/named.conf.default-zones
 COPY db.mis /etc/bind/db.mis
+
+# Öffne die Ports 53 für DNS-Anfragen
+EXPOSE 53/udp
+EXPOSE 53/tcp
+
+# Führe den BIND9-Server aus
+CMD ["named", "-g", "-c", "/etc/bind/named.conf.default-zones"]
