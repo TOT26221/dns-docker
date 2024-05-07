@@ -33,6 +33,14 @@ Bei benutzung wird gefordert das man in einem eigenem Branch arbeitet.
      ```bash
      ping -c 4 dns1.mis.lan
      ```
+   - nslookup
+     ```bash
+     nslookup
+     ```
+     Dann eine beliebige Website zb:
+     ```bash
+     www.orf.at
+     ```
 
 
 ## Dateistruktur
