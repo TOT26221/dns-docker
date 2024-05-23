@@ -1,44 +1,74 @@
 version: '3.8'
 
 services:
-  dns:
-    container_name: dns
+  dns1:
+    container_name: dns1
     build:
       context: .
       dockerfile: DNSDockerfile
     ports:
-      - "53:53/udp"  # Öffnet UDP für den DNS-Server auf dem Host
-      - "53:53/tcp"  # Öffnet TCP für den DNS-Server auf dem Host
+      - "53:53/udp"
+      - "53:53/tcp"
     volumes:
       - "./named.conf.default-zones:/etc/bind/named.conf.default-zones"
       - "./db.mis:/etc/bind/db.mis"
     networks:
       publicnet:
-        ipv4_address: 192.168.50.10  # Öffentliche IP im gebridgeden Netzwerk
+        ipv4_address: 192.168.50.10
       privatenet:
-        ipv4_address: 192.168.100.10  # Private IP im internen Netzwerk
+        ipv4_address: 192.168.100.10
+
+  dns2:
+    container_name: dns2
+    build:
+      context: .
+      dockerfile: DNSDockerfile
+    ports:
+      - "54:54/udp"
+      - "54:54/tcp"
+    volumes:
+      - "./named.conf.default-zones:/etc/bind/named.conf.default-zones"
+      - "./db.mis:/etc/bind/db.mis"
+    networks:
+      publicnet:
+        ipv4_address: 192.168.50.11
+      privatenet:
+        ipv4_address: 192.168.100.11
 
   client1:
-    container_name: client
+    container_name: client1
     build:
       context: .
       dockerfile: ClientDockerfile
     dns:
-      - 192.168.100.10  # Nutzt den DNS-Server über das interne Netzwerk
+      - 192.168.100.10
     networks:
-      privatenet:  # Nur im internen Netzwerk, nicht gebridged
+      privatenet: {}
     stdin_open: true
     tty: true
+
+  client2:
+    container_name: client2
+    build:
+      context: .
+      dockerfile: ClientAlpineDockerfile
+    dns:
+      - 192.168.100.11
+    networks:
+      privatenet: {}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dns2
 
 networks:
   publicnet:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.50.0/24  # Subnetz für das öffentliche Netzwerk
-
+        - subnet: 192.168.50.0/24
   privatenet:
     driver: bridge
     ipam:
       config:
-        - subnet: 192.168.100.0/24  # Subnetz für das private Netzwerk
+        - subnet: 192.168.100.0/24

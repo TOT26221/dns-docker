@@ -1,23 +1,18 @@
-$TTL    86400      ; Default TTL
-@       IN SOA     ns1.mis.lan. admin.mis.lan. (
-                  2024050501 ; Serial
-                  7200       ; Refresh
-                  1800       ; Retry
-                  1209600    ; Expire
-                  86400      ; Minimum TTL
-)
+$TTL    604800
+@       IN      SOA     ns1.example.com. root.example.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
 
-; Define the nameservers and the mail servers
-@       IN NS      ns1.mis.lan.
-@       IN MX 10   mail.mis.lan.
+; Nameservers
+@       IN      NS      ns1.example.com.
+@       IN      NS      ns2.example.com.
 
-; Define A records for the nameservers and other subdomains
-ns1     IN A       192.168.100.10
-mail    IN A       192.168.100.25
-www     IN A       192.168.100.30
+; A records for nameservers
+ns1     IN      A       192.168.100.10
+ns2     IN      A       192.168.100.11
 
-; Define CNAME records
-ftp     IN CNAME   www.mis.lan.
-
-; Define additional records such as SPF and TXT
-@       IN TXT     "v=spf1 mx -all"  ; SPF record
+; Other records
+www     IN      A       192.168.100.20

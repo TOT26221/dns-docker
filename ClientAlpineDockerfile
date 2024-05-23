@@ -1,0 +1,21 @@
+# Verwende das offizielle Alpine-Image als Basis
+FROM alpine:latest
+
+# Installiere erforderliche Tools
+RUN apk update && \
+    apk add --no-cache \
+    iputils \
+    bind-tools \
+    net-tools \
+    bash \
+    bash-completion \
+    mtr \
+    nmap \
+    traceroute \
+    netcat-openbsd \
+    iproute2 \
+    tcpdump \
+    dhclient
+
+# Das Start-Kommando hält den Container am Laufen, um Interaktion zu ermöglichen
+CMD ["tail", "-f", "/dev/null"]
