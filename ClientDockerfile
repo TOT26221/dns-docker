@@ -3,8 +3,20 @@ FROM ubuntu:20.04
 
 # Installiere erforderliche Tools
 RUN apt-get update && \
-    apt-get install -y iputils-ping dnsutils net-tools && \
-    apt-get install -y bash-completion command-not-found mtr-tiny dnsutils net-tools && \
-    apt-get install -y nmap traceroute netcat iproute2 tcpdump iputils-ping isc-dhcp-client && \
-# Das Start-Kommando hält den Container am Laufen, um interaktion zu ermöglichen
-CMD ["tail", "-f", "/dev/null"]
+    apt-get install -y \
+    iputils-ping \
+    dnsutils \
+    net-tools \
+    bash-completion \
+    mtr-tiny \
+    nmap \
+    traceroute \
+    netcat \
+    iproute2 \
+    tcpdump \
+    isc-dhcp-client && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get clean
+
+# Das Start-Kommando hält den Container am Laufen, um Interaktion zu ermöglichen
+CMD ["bash"]
