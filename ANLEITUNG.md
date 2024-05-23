@@ -42,6 +42,142 @@ Diese Anleitung erklärt Schritt für Schritt, wie du ein DNS-System in Docker s
    dns1    IN A   192.168.0.10
    client-1 IN A  192.168.0.20
    ```
+
+ERKLÄRUNG - BEZÜGLICH DER NEUSTEN VERÄNDERUNGEN - STAND 23.4.2024:
+markdown
+Code kopieren
+# DNS-Zone-Datei Erklärung
+
+## TTL (Time To Live)
+```plaintext
+$TTL 86400
+Dies gibt die Standard-Gültigkeitsdauer von DNS-Einträgen in Sekunden an. Hier beträgt die TTL 86400 Sekunden, was 24 Stunden entspricht. Das bedeutet, dass DNS-Einträge für diese Domain 24 Stunden lang zwischengespeichert werden, bevor sie erneut abgefragt werden müssen.
+
+SOA (Start of Authority) Eintrag
+plaintext
+Code kopieren
+@ IN SOA ns1.mis.lan. admin.mis.lan. (
+              2024050501 ; Serial
+              7200       ; Refresh
+              1800       ; Retry
+              1209600    ; Expire
+              86400      ; Minimum TTL
+)
+Dieser Eintrag definiert den primären Nameserver für die Zone (ns1.mis.lan.) und die E-Mail-Adresse des Administrators (in diesem Fall admin.mis.lan. wobei das "@"-Zeichen durch einen Punkt ersetzt wird). Die Zahlen in Klammern sind:
+
+Serial: Eine Versionsnummer für die Zone. Diese muss bei jeder Änderung der Zone erhöht werden.
+Refresh: Gibt an, wie oft sekundäre Nameserver die Zone aktualisieren sollen (in diesem Fall alle 2 Stunden).
+Retry: Gibt an, wie lange sekundäre Nameserver warten sollen, bevor sie nach einem fehlgeschlagenen Aktualisierungsversuch erneut versuchen (hier 30 Minuten).
+Expire: Gibt an, wie lange sekundäre Nameserver die Zone vorhalten sollen, wenn sie keine Aktualisierung erhalten können (hier 14 Tage).
+Minimum TTL: Die minimale TTL, die für negative Antworten gilt (hier 24 Stunden).
+Nameserver (NS) Eintrag
+plaintext
+Code kopieren
+@ IN NS ns1.mis.lan.
+Dieser Eintrag gibt den autoritativen Nameserver für die Zone an. Das @-Zeichen steht für die Root-Domain der Zone (mis.lan.).
+
+Mail Exchanger (MX) Eintrag
+plaintext
+Code kopieren
+@ IN MX 10 mail.mis.lan.
+Dieser Eintrag definiert den Mailserver für die Domain. Die Zahl 10 ist die Priorität, wobei niedrigere Zahlen eine höhere Priorität haben. E-Mails an mis.lan. werden an mail.mis.lan. weitergeleitet.
+
+A Einträge
+plaintext
+Code kopieren
+ns1     IN A 192.168.100.10
+mail    IN A 192.168.100.25
+www     IN A 192.168.100.30
+ns1 IN A 192.168.100.10: Weist den Hostnamen ns1.mis.lan. die IP-Adresse 192.168.100.10 zu.
+mail IN A 192.168.100.25: Weist den Hostnamen mail.mis.lan. die IP-Adresse 192.168.100.25 zu.
+www IN A 192.168.100.30: Weist den Hostnamen www.mis.lan. die IP-Adresse 192.168.100.30 zu.
+CNAME (Canonical Name) Eintrag
+plaintext
+Code kopieren
+ftp IN CNAME www.mis.lan.
+Dieser Eintrag gibt an, dass der Hostname ftp.mis.lan. ein Alias für www.mis.lan. ist. Anfragen an ftp.mis.lan. werden an www.mis.lan. weitergeleitet.
+
+TXT Eintrag
+plaintext
+Code kopieren
+@ IN TXT "v=spf1 mx -all"
+Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework) verwendet wird. Der SPF-Eintrag hilft, E-Mail-Spoofing zu verhindern, indem er festlegt, welche Server berechtigt sind, E-Mails im Namen der Domain zu senden. Hier bedeutet v=spf1 mx -all, dass nur der Mailserver, der im MX-Eintrag definiert ist, E-Mails für diese Domain senden darf.
+
+Code kopieren
+
+
+
+ZUM herunterladen
+ChatGPT
+Die DNS-Zone-Datei Erklärung wurde erfolgreich in eine Markdown-Datei gespeichert. Sie können die Datei hier herunterladen. ​​
+
+
+2/2
+
+gib die datei zum kopieren an
+ChatGPT
+Hier ist der vollständige Inhalt der Markdown-Datei zum Kopieren:
+
+markdown
+Code kopieren
+# DNS-Zone-Datei Erklärung
+
+## TTL (Time To Live)
+```plaintext
+$TTL 86400
+Dies gibt die Standard-Gültigkeitsdauer von DNS-Einträgen in Sekunden an. Hier beträgt die TTL 86400 Sekunden, was 24 Stunden entspricht. Das bedeutet, dass DNS-Einträge für diese Domain 24 Stunden lang zwischengespeichert werden, bevor sie erneut abgefragt werden müssen.
+
+SOA (Start of Authority) Eintrag
+plaintext
+Code kopieren
+@ IN SOA ns1.mis.lan. admin.mis.lan. (
+              2024050501 ; Serial
+              7200       ; Refresh
+              1800       ; Retry
+              1209600    ; Expire
+              86400      ; Minimum TTL
+)
+Dieser Eintrag definiert den primären Nameserver für die Zone (ns1.mis.lan.) und die E-Mail-Adresse des Administrators (in diesem Fall admin.mis.lan. wobei das "@"-Zeichen durch einen Punkt ersetzt wird). Die Zahlen in Klammern sind:
+
+Serial: Eine Versionsnummer für die Zone. Diese muss bei jeder Änderung der Zone erhöht werden.
+Refresh: Gibt an, wie oft sekundäre Nameserver die Zone aktualisieren sollen (in diesem Fall alle 2 Stunden).
+Retry: Gibt an, wie lange sekundäre Nameserver warten sollen, bevor sie nach einem fehlgeschlagenen Aktualisierungsversuch erneut versuchen (hier 30 Minuten).
+Expire: Gibt an, wie lange sekundäre Nameserver die Zone vorhalten sollen, wenn sie keine Aktualisierung erhalten können (hier 14 Tage).
+Minimum TTL: Die minimale TTL, die für negative Antworten gilt (hier 24 Stunden).
+Nameserver (NS) Eintrag
+plaintext
+Code kopieren
+@ IN NS ns1.mis.lan.
+Dieser Eintrag gibt den autoritativen Nameserver für die Zone an. Das @-Zeichen steht für die Root-Domain der Zone (mis.lan.).
+
+Mail Exchanger (MX) Eintrag
+plaintext
+Code kopieren
+@ IN MX 10 mail.mis.lan.
+Dieser Eintrag definiert den Mailserver für die Domain. Die Zahl 10 ist die Priorität, wobei niedrigere Zahlen eine höhere Priorität haben. E-Mails an mis.lan. werden an mail.mis.lan. weitergeleitet.
+
+A Einträge
+plaintext
+Code kopieren
+ns1     IN A 192.168.100.10
+mail    IN A 192.168.100.25
+www     IN A 192.168.100.30
+ns1 IN A 192.168.100.10: Weist den Hostnamen ns1.mis.lan. die IP-Adresse 192.168.100.10 zu.
+mail IN A 192.168.100.25: Weist den Hostnamen mail.mis.lan. die IP-Adresse 192.168.100.25 zu.
+www IN A 192.168.100.30: Weist den Hostnamen www.mis.lan. die IP-Adresse 192.168.100.30 zu.
+CNAME (Canonical Name) Eintrag
+plaintext
+Code kopieren
+ftp IN CNAME www.mis.lan.
+Dieser Eintrag gibt an, dass der Hostname ftp.mis.lan. ein Alias für www.mis.lan. ist. Anfragen an ftp.mis.lan. werden an www.mis.lan. weitergeleitet.
+
+TXT Eintrag
+plaintext
+Code kopieren
+@ IN TXT "v=spf1 mx -all"
+Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework) verwendet wird. Der SPF-Eintrag hilft, E-Mail-Spoofing zu verhindern, indem er festlegt, welche Server berechtigt sind, E-Mails im Namen der Domain zu senden. Hier bedeutet v=spf1 mx -all, dass nur der Mailserver, der im MX-Eintrag definiert ist, E-Mails für diese Domain senden darf.
+
+
 2. **Erstelle ein Dockerfile** für den DNS-Server (`DNSDockerfile`) und füge den folgenden Inhalt hinzu:
    ```Dockerfile
    FROM ubuntu/bind9
