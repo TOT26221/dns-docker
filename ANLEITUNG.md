@@ -208,6 +208,13 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
    RUN apt-get update && apt-get install -y dnsutils
    CMD ["bash"]
    ```
+ **FROM ubuntu:20.04**: Verwendet das Ubuntu 20.04 Basis-Image.
+ 
+**RUN apt-get update && apt-get install -y dnsutils**: Führt eine Aktualisierung der Paketlisten durch und installiert die dnsutils-Pakete, die DNS-Tools wie dig und nslookup enthalten.
+
+**CMD ["bash"]**: Startet eine Bash-Shell, wenn der Container läuft.
+
+**Zusammengefasst erstellt dieser Dockerfile ein Image basierend auf Ubuntu 20.04, installiert DNS-Tools und startet eine Bash-Shell, wenn der Container ausgeführt wird.**
 
 ### Schritt 5: Erstellen der Docker Compose-Datei
 1. **Erstelle eine Datei namens `docker-compose.yml`** in deinem Projektverzeichnis. Füge den folgenden Inhalt hinzu, um die Services zu definieren:
