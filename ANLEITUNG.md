@@ -19,11 +19,23 @@ Diese Anleitung erklärt Schritt für Schritt, wie du ein DNS-System in Docker s
    cd dns-docker
    ```
 
+
+
 ### Schritt 2: Erstellen des Docker-Netzwerks
 1. **Erstelle ein Docker-Netzwerk** mit dem Namen `vdnsnet`:
    ```
    docker network create --gateway 192.168.0.1 --subnet 192.168.0.0/24 vdnsnet
    ```
+
+**docker network create:** Erstellt ein neues Docker-Netzwerk.
+
+**--gateway 192.168.0.1:** Legt die Gateway-Adresse des Netzwerks auf 192.168.0.1 fest. Das Gateway ist der Ausgangspunkt für Netzwerkverbindungen außerhalb des Docker-Netzwerks.
+
+**--subnet 192.168.0.0/24:** Definiert das Subnetz des Netzwerks als 192.168.0.0/24, was bedeutet, dass die IP-Adressen im Bereich von 192.168.0.0 bis 192.168.0.255 liegen.
+
+**vdnsnet:** Der Name des zu erstellenden Netzwerks.
+
+Zusammengefasst erstellt dieser Befehl ein neues Docker-Netzwerk mit einem bestimmten Gateway und Subnetz.
 
 ### Schritt 3: Konfiguration des DNS-Servers
 1. **Erstelle die Zonendatei `db.mis`** für deine Domain `mis.lan` mit einem Texteditor und speichere sie in deinem Projektverzeichnis. Füge die folgenden Inhalte ein:
