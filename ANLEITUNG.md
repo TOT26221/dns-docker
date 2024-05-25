@@ -244,6 +244,28 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
        external: true
    ```
 
+**version: '3'**: Version der Docker-Compose-Datei.
+
+**services:** Definiert die Dienste.
+
+## dns:
+**build:** Baut das Image aus dem aktuellen Verzeichnis mit DNSDockerfile.
+**container_name:** Setzt den Namen des Containers auf dns-server.
+**networks:** Verbindet den Container mit dem Netzwerk vdnsnet und weist ihm die IP 192.168.0.10 zu.
+
+
+## client:
+**build:** Baut das Image aus dem aktuellen Verzeichnis mit ClientDockerfile.
+**container_name:** Setzt den Namen des Containers auf dns-client.
+**networks:** Verbindet den Container mit dem Netzwerk vdnsnet und weist ihm die IP 192.168.0.20 zu.
+**depends_on:** Startet den client-Dienst erst nach dem dns-Dienst.
+
+
+## networks:
+**vdnsnet:** Verwendet ein externes Netzwerk namens vdnsnet.
+
+
+
 ### Schritt 6: Starten der Container
 1. **Starte die Container** mit Docker Compose:
    ```
