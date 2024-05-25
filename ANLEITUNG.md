@@ -18,7 +18,9 @@ Diese Anleitung erklärt Schritt für Schritt, wie du ein DNS-System in Docker s
    mkdir dns-docker
    cd dns-docker
    ```
+**mkdir dns-docker:** Erstellt ein neues Verzeichnis mit dem Namen dns-docker.
 
+**cd dns-docker:** Wechselt in das neu erstellte Verzeichnis dns-docker.
 
 
 ### Schritt 2: Erstellen des Docker-Netzwerks
