@@ -307,4 +307,7 @@ Diese Abfrage prüft, ob der DNS-Server korrekt konfiguriert ist und die DNS-Nam
    docker-compose down
    ```
 
+**docker-compose down:** Dieser Befehl beendet alle laufenden Container, die durch Docker Compose gestartet wurden, und entfernt sie zusammen mit den Netzwerken, die in der Docker-Compose-Datei definiert sind. Er sorgt dafür, dass alle Ressourcen sauber aufgeräumt werden, sobald sie nicht mehr benötigt werden.
+
+
 **Glückwunsch!** Du hast erfolgreich ein DNS-System in Docker eingerichtet und getestet. Diese Übung hilft dir, die Konzepte von DNS und die Nutzung von Docker für Netzwerksimulationen zu verstehen.
