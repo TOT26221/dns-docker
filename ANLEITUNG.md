@@ -287,6 +287,20 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
    docker exec dns-client dig @192.168.0.10 dns1.mis.lan
    ```
 
+**docker exec dns-client:** Führt einen Befehl im laufenden dns-client Container aus.
+
+**dig @192.168.0.10 dns1.mis.lan:** Verwendet das dig-Tool, um eine DNS-Abfrage für dns1.mis.lan an den DNS-Server mit der IP-Adresse 192.168.0.10 zu senden.
+
+Diese Abfrage prüft, ob der DNS-Server korrekt konfiguriert ist und die DNS-Namensauflösung funktioniert.
+
+**dig (Domain Information Groper)** ist ein Befehlszeilenwerkzeug zur Abfrage von DNS-Servern und zur Anzeige detaillierter Informationen über DNS-Einträge. Es wird häufig zur Diagnose und Fehlerbehebung von DNS-Problemen verwendet, da es detaillierte Antworten und Debugging-Informationen liefert. dig ist flexibel und unterstützt verschiedene Abfragetypen wie A, MX, TXT, und viele mehr.
+
+**Eine Alternative** zu **dig** ist **nslookup**, das ebenfalls DNS-Informationen abfragt, jedoch in einer einfacheren, weniger detaillierten Ausgabeform, was für grundlegende DNS-Abfragen ausreichend sein kann.
+
+
+
+
+
 ### Schritt 8: Aufräumen
 1. **Beende und entferne die Container**, wenn du fertig bist:
    ```
