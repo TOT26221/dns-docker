@@ -230,6 +230,52 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
 
 **Zusammengefasst erstellt dieser Dockerfile ein Image basierend auf Ubuntu 20.04, installiert DNS-Tools und startet eine Bash-Shell, wenn der Container ausgeführt wird.**
 
+
+
+**Altes Dockerfile:**
+
+Installiert nur dnsutils für grundlegende DNS-Aufgaben wie nslookup und dig.
+
+Sehr einfach und minimalistisch, geeignet für grundlegende DNS-Abfragen.
+
+**Neues Dockerfile:**
+
+**Installiert eine Vielzahl von Netzwerk- und Diagnosetools:**
+
+**iputils-ping:** Zum Pingen von Hosts.
+
+**dnsutils:** Für DNS-Tools wie dig und nslookup
+
+**net-tools:** Enthält Netzwerk-Tools wie ifconfig.
+
+**bash-completion:** Ermöglicht Tab-Vervollständigung in der Bash.
+
+**mtr-tiny:** Ein Netzwerk-Diagnosetool.
+
+**nmap:** Ein Netzwerk-Scanner.
+
+**traceroute:** Verfolgt die Route zu einem Host.
+
+**netcat:** Ein vielseitiges Netzwerk-Diagnosetool.
+
+**iproute2:** Ein Paket für Netzwerkkonfigurations- und Diagnose-Tools wie ip.
+
+**tcpdump:** Ein Netzwerkanalysetool.
+
+**isc-dhcp-client:** Ein DHCP-Client.
+
+Führt ein Aufräumen durch, um den Container schlanker zu halten:
+
+Entfernt temporäre Paketlisten.
+
+Führt apt-get clean aus, um den Cache zu leeren.
+
+Bietet eine umfassendere Einrichtung, die für vielfältige Netzwerkaufgaben und -analysen nützlich ist.
+
+**Gemeinsamkeiten:**
+
+Beide starten eine Bash-Shell, wodurch der Container aktiv und interaktiv bleibt.
+
 ### Schritt 5: Erstellen der Docker Compose-Datei
 1. **Erstelle eine Datei namens `docker-compose.yml`** in deinem Projektverzeichnis. Füge den folgenden Inhalt hinzu, um die Services zu definieren:
    **ALT:**
