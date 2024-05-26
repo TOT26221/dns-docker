@@ -232,7 +232,8 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
 
 ### Schritt 5: Erstellen der Docker Compose-Datei
 1. **Erstelle eine Datei namens `docker-compose.yml`** in deinem Projektverzeichnis. Füge den folgenden Inhalt hinzu, um die Services zu definieren:
-   ```yaml
+   **ALT:**
+```yaml
    version: '3'
    services:
      dns:
@@ -257,12 +258,89 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
      vdnsnet:
        external: true
    ```
+   **NEU:**
+```yaml
+version: '3.8'
 
+services:
+  dns1:
+    container_name: dns1
+    build:
+      context: .
+      dockerfile: DNSDockerfile
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      - "./named.conf.default-zones:/etc/bind/named.conf.default-zones"
+      - "./db.mis:/etc/bind/db.mis"
+    networks:
+      publicnet:
+        ipv4_address: 192.168.50.10
+      privatenet:
+        ipv4_address: 192.168.100.10
+
+  dns2:
+    container_name: dns2
+    build:
+      context: .
+      dockerfile: DNSDockerfile
+    ports:
+      - "54:54/udp"
+      - "54:54/tcp"
+    volumes:
+      - "./named.conf.default-zones:/etc/bind/named.conf.default-zones"
+      - "./db.mis:/etc/bind/db.mis"
+    networks:
+      publicnet:
+        ipv4_address: 192.168.50.11
+      privatenet:
+        ipv4_address: 192.168.100.11
+
+  client1:
+    container_name: client1
+    build:
+      context: .
+      dockerfile: ClientDockerfile
+    dns:
+      - 192.168.100.10
+    networks:
+      privatenet: {}
+    stdin_open: true
+    tty: true
+
+  client2:
+    container_name: client2
+    build:
+      context: .
+      dockerfile: ClientAlpineDockerfile
+    dns:
+      - 192.168.100.11
+    networks:
+      privatenet: {}
+    stdin_open: true
+    tty: true
+    depends_on:
+      - dns2
+
+networks:
+  publicnet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.50.0/24
+  privatenet:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.100.0/24
+ ```
+**ALt:**
 **version: '3'**: Version der Docker-Compose-Datei.
 
 **services:** Definiert die Dienste.
 
-## dns:
+**dns:**
 **build:** Baut das Image aus dem aktuellen Verzeichnis mit DNSDockerfile.
 
 **container_name:** Setzt den Namen des Containers auf dns-server.
@@ -270,7 +348,7 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
 **networks:** Verbindet den Container mit dem Netzwerk vdnsnet und weist ihm die IP 192.168.0.10 zu.
 
 
-## client:
+**client:**
 **build:** Baut das Image aus dem aktuellen Verzeichnis mit ClientDockerfile.
 
 **container_name:** Setzt den Namen des Containers auf dns-client.
@@ -280,10 +358,53 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
 **depends_on:** Startet den client-Dienst erst nach dem dns-Dienst.
 
 
-## networks:
+**networks:**
 **vdnsnet:** Verwendet ein externes Netzwerk namens vdnsnet.
 
+## NEU:
+**Version**
+Dies legt die Version des Docker Compose Formats fest, das verwendet wird. In diesem Fall ist es Version 3.8.
 
+**Services**
+Dies definiert die verschiedenen Container, die gestartet werden sollen.
+
+**DNS1**
+
+Container-Name: Der Container heißt "dns1".
+
+Build: Der Container wird aus einem Dockerfile namens DNSDockerfile im aktuellen Verzeichnis erstellt.
+
+Ports: Bestimmte Ports auf dem Host werden zu Ports im Container weitergeleitet, damit der DNS-Server erreichbar ist.
+
+Volumes: Dateien oder Verzeichnisse vom Host werden in den Container gemountet, um Konfigurationsdateien bereitzustellen.
+
+Netzwerke: Der Container wird mit zwei Netzwerken verbunden, einem öffentlichen und einem privaten, mit jeweils festen IP-Adressen.
+
+**DNS2**
+
+Ähnlich wie DNS1, aber mit anderen Ports und IP-Adressen, um einen zweiten DNS-Server bereitzustellen.
+
+**Client1**
+
+Container-Name: Der Container heißt "client1".
+
+Build: Der Container wird aus einem Dockerfile namens ClientDockerfile im aktuellen Verzeichnis erstellt.
+
+DNS: Der Container verwendet den DNS-Server 192.168.100.10.
+
+Netzwerk: Der Container ist mit dem privaten Netzwerk verbunden.
+
+Interaktives Terminal: Erlaubt die Nutzung eines interaktiven Terminals.
+
+**Client2**
+
+Ähnlich wie Client1, aber verwendet ein anderes Dockerfile (ClientAlpineDockerfile) und hängt vom Start des dns2-Containers ab.
+
+**Netzwerke**
+
+Publicnet: Ein öffentliches Netzwerk mit dem Subnetz 192.168.50.0/24.
+
+Privatenet: Ein privates Netzwerk mit dem Subnetz 192.168.100.0/24.
 
 ### Schritt 6: Starten der Container
 1. **Starte die Container** mit Docker Compose:
