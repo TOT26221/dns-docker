@@ -406,6 +406,18 @@ Publicnet: Ein öffentliches Netzwerk mit dem Subnetz 192.168.50.0/24.
 
 Privatenet: Ein privates Netzwerk mit dem Subnetz 192.168.100.0/24.
 
+**nochmal die Veränderungen:**
+In der alten Docker Compose Datei wird Version 3 verwendet, während in der neuen Datei Version 3.8 verwendet wird, was neuer ist und mehr Funktionen unterstützt. Die alte Datei definiert zwei Services, dns und client, während die neue Datei vier Services hat: **dns1**, **dns2**, **client1** und **client2**.
+
+Der alte dns-Service hat eine feste IP-Adresse, während in der neuen Datei **dns1** und **dns2** unterschiedliche Ports und feste IP-Adressen in zwei verschiedenen Netzwerken haben. Der alte client-Service hat ebenfalls eine feste IP-Adresse und hängt vom dns-Service ab. In der neuen Datei haben **client1** und **client2** dynamische IP-Adressen im privaten Netzwerk, wobei **client2** vom **dns2-Service** abhängt.
+
+Die alte Datei verwendet ein externes Netzwerk namens **vdnsnet**. Die neue Datei definiert zwei interne Netzwerke, publicnet und privatenet, mit festgelegten Subnetzen. Darüber hinaus sind in der neuen Datei Ports und Volumes für **dns1** und **dns2** definiert, um DNS-Dienste und Konfigurationsdateien bereitzustellen. Zudem sind stdin_open und tty für **client1** und **client2** aktiviert, um interaktive Terminals zu ermöglichen.
+
+Insgesamt ist die neue Datei detaillierter und flexibler, unterstützt mehrere DNS-Server und Netzwerke und ermöglicht eine bessere Konfiguration und Isolation der Dienste.
+
+
+
+
 ### Schritt 6: Starten der Container
 1. **Starte die Container** mit Docker Compose:
    ```
