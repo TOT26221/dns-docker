@@ -8,6 +8,8 @@ Diese Anleitung erklärt Schritt für Schritt, wie du ein DNS-System in Docker s
 - Docker Desktop oder Docker Engine (installiert und lauffähig)
 - Grundlegendes Verständnis von Terminal- oder Command-Prompt-Befehlen
 - Texteditor deiner Wahl (z.B. Notepad++, Visual Studio Code)
+- 
+## ERKLÄRUNG - BEZÜGLICH DER NEUSTEN VERÄNDERUNGEN - STAND 26.4.2024:
 
 ## Schritte
 
@@ -57,7 +59,7 @@ Zusammengefasst erstellt dieser Befehl ein neues Docker-Netzwerk mit einem besti
    client-1 IN A  192.168.0.20
    ```
 
-## ERKLÄRUNG - BEZÜGLICH DER NEUSTEN VERÄNDERUNGEN - STAND 23.4.2024:
+
 markdown
 
 ### DNS-Zone-Datei Erklärung
