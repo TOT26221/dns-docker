@@ -231,10 +231,10 @@ Dieser Eintrag definiert einen Textstring, der für SPF (Sender Policy Framework
 **Zusammengefasst erstellt dieser Dockerfile ein Image basierend auf Ubuntu 20.04, installiert DNS-Tools und startet eine Bash-Shell, wenn der Container ausgeführt wird.**
 
 ### NEU:
-# Verwende das offizielle Ubuntu-Image als Basis
+**Verwende das offizielle Ubuntu-Image als Basis**
 FROM ubuntu:20.04
 
-# Installiere erforderliche Tools
+**Installiere erforderliche Tools**
 ```
 RUN apt-get update && \
     apt-get install -y \
@@ -252,7 +252,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* && \
     apt-get clean
 
-# Das Start-Kommando hält den Container am Laufen, um Interaktion zu ermöglichen
+Das Start-Kommando hält den Container am Laufen, um Interaktion zu ermöglichen
 CMD ["bash"]
 ```
 **Altes Dockerfile:**
